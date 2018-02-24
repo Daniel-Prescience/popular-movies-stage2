@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PopularMovies</string>
+    <string name="image_contentDescription">Image description</string>
 </resources>
