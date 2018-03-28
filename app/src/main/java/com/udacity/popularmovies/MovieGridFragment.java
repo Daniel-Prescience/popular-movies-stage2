@@ -2,6 +2,7 @@ package com.udacity.popularmovies;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.popularmovies.Model.Movie;
+import com.udacity.popularmovies.models.Movie;
 
 /**
  * A fragment representing a list of Items.
@@ -20,9 +21,7 @@ import com.udacity.popularmovies.Model.Movie;
  */
 public class MovieGridFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
@@ -34,7 +33,6 @@ public class MovieGridFragment extends Fragment {
     public MovieGridFragment() {
     }
 
-    // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
     public static MovieGridFragment newInstance(int columnCount) {
         MovieGridFragment fragment = new MovieGridFragment();
@@ -54,7 +52,7 @@ public class MovieGridFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
 
@@ -107,7 +105,6 @@ public class MovieGridFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onListFragmentInteraction(Movie item);
     }
 }

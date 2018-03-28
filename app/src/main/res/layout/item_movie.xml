@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:contentDescription="@string/image_contentDescription"
+        android:contentDescription="@string/movie_picture_content_description_default"
         app:srcCompat="@android:color/transparent" />
 
 </LinearLayout>
