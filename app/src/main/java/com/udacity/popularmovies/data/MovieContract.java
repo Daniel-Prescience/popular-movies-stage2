@@ -7,7 +7,7 @@ public class MovieContract {
 
     public static final String AUTHORITY = "com.udacity.popularmovies";
 
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_MOVIES = "movies";
 
     private MovieContract() {}
@@ -25,5 +25,14 @@ public class MovieContract {
         public static final String COLUMN_NAME_POSTER_PATH = "poster_path";
         public static final String COLUMN_NAME_VOTE_AVERAGE = "vote_average";
         public static final String COLUMN_NAME_POPULARITY = "popularity";
+
+        public static final int COLUMN_INDEX_ROW_ID = 0;
+        public static final int COLUMN_INDEX_MOVIE_ID = 1;
+        public static final int COLUMN_INDEX_TITLE = 2;
+        public static final int COLUMN_INDEX_OVERVIEW = 3;
+        public static final int COLUMN_INDEX_RELEASE_DATE = 4;
+        public static final int COLUMN_INDEX_POSTER_PATH = 5;
+        public static final int COLUMN_INDEX_VOTE_AVERAGE = 6;
+        public static final int COLUMN_INDEX_POPULARITY = 7;
     }
 }

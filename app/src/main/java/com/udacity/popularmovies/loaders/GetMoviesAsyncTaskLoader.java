@@ -97,7 +97,8 @@ public class GetMoviesAsyncTaskLoader extends AsyncTaskLoader<Movie[]> {
                         movie.getString(JSON_RELEASE_DATE_KEY),
                         movie.getString(JSON_POSTER_KEY),
                         movie.getString(JSON_RATING_KEY),
-                        movie.getString(JSON_POPULARITY_KEY));
+                        movie.getString(JSON_POPULARITY_KEY),
+                        false);
             }
 
             return movies;

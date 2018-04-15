@@ -109,7 +109,7 @@ public class MovieContentProvider extends ContentProvider {
 
         switch (match) {
             case MOVIES:
-                numRowsDeleted = db.delete(MovieEntry.TABLE_NAME, null, null);
+                numRowsDeleted = db.delete(MovieEntry.TABLE_NAME, selection, selectionArgs);
 
                 break;
 
@@ -127,7 +127,6 @@ public class MovieContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 

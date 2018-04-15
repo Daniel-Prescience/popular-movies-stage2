@@ -2,7 +2,6 @@ package com.udacity.popularmovies.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -63,35 +62,6 @@ public class DetailActivity extends AppCompatActivity implements
 
             ImageView moviePosterIv = findViewById(R.id.movie_poster_iv);
 
-            final Context that = this;
-            ToggleButton favoriteToggle = findViewById(R.id.toggleButton);
-            favoriteToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        // The toggle is enabled
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(MovieEntry.COLUMN_NAME_MOVIE_ID, movie.id);
-
-                        Uri uri = getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
-
-                        if (uri != null) {
-                            UserInterfaceUtils.ShowToastMessage(movie.title + " added to favorites.", that);
-                        }
-                    } else {
-                        // The toggle is disabled
-                        String stringMovieId = Long.toString(movie.id);
-                        Uri uri = MovieEntry.CONTENT_URI;
-                        uri = uri.buildUpon().appendPath(stringMovieId).build();
-
-                        int deleted = getContentResolver().delete(uri, null, null);
-
-                        if (deleted > 0) {
-                            UserInterfaceUtils.ShowToastMessage(movie.title + " removed from favorites.", that);
-                        }
-                    }
-                }
-            });
-
             populateUI(movie);
 
             Picasso.with(this)
@@ -111,13 +81,9 @@ public class DetailActivity extends AppCompatActivity implements
                 Loader<Boolean> reviewLoader = loaderManager.getLoader(LOADER_ID_MOVIE_REVIEWS);
 
                 if (trailerLoader == null)
-                    loaderManager.initLoader(LOADER_ID_MOVIE_TRAILERS, taskLoaderBundle, this);
-                else
                     loaderManager.restartLoader(LOADER_ID_MOVIE_TRAILERS, taskLoaderBundle, this);
 
                 if (reviewLoader == null)
-                    loaderManager.initLoader(LOADER_ID_MOVIE_REVIEWS, taskLoaderBundle, this);
-                else
                     loaderManager.restartLoader(LOADER_ID_MOVIE_REVIEWS, taskLoaderBundle, this);
             }
         } else
@@ -175,25 +141,54 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLoaderReset(@NonNull Loader loader) {
-
-    }
+    public void onLoaderReset(@NonNull Loader loader) { }
 
     private void closeOnError() {
         finish();
         UserInterfaceUtils.ShowToastMessage(getString(R.string.detail_error_message), this);
     }
 
-    private void populateUI(Movie movie) {
+    private void populateUI(final Movie movie) {
         TextView titleTv = findViewById(R.id.title_tv);
         TextView releaseDateTv = findViewById(R.id.release_date_tv);
         TextView voteAverageTv = findViewById(R.id.vote_average_tv);
         TextView plotSynopsisTv = findViewById(R.id.plot_synopsis_tv);
+        ToggleButton favoriteToggle = findViewById(R.id.toggleButton);
 
         titleTv.setText(movie.title);
         releaseDateTv.setText(movie.release_date);
         voteAverageTv.setText(movie.vote_average);
         plotSynopsisTv.setText(movie.overview);
+        favoriteToggle.setChecked(movie.favorite);
+
+        favoriteToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(MovieEntry.COLUMN_NAME_MOVIE_ID, movie.id);
+                    contentValues.put(MovieEntry.COLUMN_NAME_TITLE, movie.title);
+                    contentValues.put(MovieEntry.COLUMN_NAME_OVERVIEW, movie.overview);
+                    contentValues.put(MovieEntry.COLUMN_NAME_RELEASE_DATE, movie.release_date);
+                    contentValues.put(MovieEntry.COLUMN_NAME_POSTER_PATH, movie.poster_path);
+                    contentValues.put(MovieEntry.COLUMN_NAME_VOTE_AVERAGE, movie.vote_average);
+                    contentValues.put(MovieEntry.COLUMN_NAME_POPULARITY, movie.popularity);
+
+                    Uri uri = getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
+
+                    if (uri != null) {
+                        UserInterfaceUtils.ShowToastMessage(movie.title + " added to favorites.", DetailActivity.this);
+                    }
+                } else {
+                    // The toggle is disabled
+                    int deleted = getContentResolver().delete(MovieEntry.CONTENT_URI, MovieEntry.COLUMN_NAME_MOVIE_ID + " = ? ", new String[]{Long.toString(movie.id)});
+
+                    if (deleted > 0) {
+                        UserInterfaceUtils.ShowToastMessage(movie.title + " removed from favorites.", DetailActivity.this);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -212,7 +207,5 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onListFragmentInteraction(Review review) {
-
-    }
+    public void onListFragmentInteraction(Review review) { }
 }

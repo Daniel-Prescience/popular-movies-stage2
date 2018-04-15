@@ -10,9 +10,10 @@ public class Movie implements Parcelable {
     public final String release_date;
     public final String poster_path;
     public final String vote_average;
-    private final String popularity;
+    public final String popularity;
+    public boolean favorite;
 
-    public Movie(Long id, String title, String overview, String release_date, String poster_path, String vote_average, String popularity) {
+    public Movie(Long id, String title, String overview, String release_date, String poster_path, String vote_average, String popularity, boolean favorite) {
         this.id = id;
         this.title = title;
         this.overview = overview;
@@ -20,6 +21,7 @@ public class Movie implements Parcelable {
         this.poster_path = poster_path;
         this.vote_average = vote_average;
         this.popularity = popularity;
+        this.favorite = favorite;
     }
 
     private Movie(Parcel in) {
@@ -34,6 +36,7 @@ public class Movie implements Parcelable {
         poster_path = in.readString();
         vote_average = in.readString();
         popularity = in.readString();
+        favorite = in.readInt() == 1;
     }
 
     public static final Creator<Movie> CREATOR = new Creator<Movie>() {
@@ -67,5 +70,6 @@ public class Movie implements Parcelable {
         dest.writeString(poster_path);
         dest.writeString(vote_average);
         dest.writeString(popularity);
+        dest.writeInt(favorite ? 1 : 0);
     }
 }
