@@ -69,16 +69,14 @@ public class MainActivity extends AppCompatActivity implements
 
         if (SortSelection != null && SortSelection.equals(getString(R.string.favorites))) {
             MovieList = FavoriteList;
-            getSupportLoaderManager().restartLoader(LOADER_ID_FAVORITE_MOVIES, null, this);
         }
+        else
+            getSupportLoaderManager().restartLoader(LOADER_ID_FAVORITE_MOVIES, null, this);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        /*outState.putString(SAVED_STATE_MOVIES, SortSelection);*/
-/*        outState.putParcelableArray(SAVED_STATE_MOVIES, MovieList);
-        outState.putParcelableArray(SAVED_STATE_FAVORITES, FavoriteList);*/
     }
 
     // Credit: https://stackoverflow.com/a/37250623/5999847
@@ -174,10 +172,12 @@ public class MainActivity extends AppCompatActivity implements
                 }
 
                 FavoriteList = favorites;
+
+                if (SortSelection != null && SortSelection.equals(getString(R.string.favorites)))
+                    MovieList = FavoriteList;
             }
-            else {
+            else if (SortSelection == null || !SortSelection.equals(getString(R.string.favorites))){
                 MovieList = (Movie[]) loaderData;
-                //endregion
             }
 
             RefreshFragmentData();
