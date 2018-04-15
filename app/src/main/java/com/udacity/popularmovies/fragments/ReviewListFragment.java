@@ -1,76 +1,71 @@
-package com.udacity.popularmovies;
+package com.udacity.popularmovies.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.popularmovies.models.Movie;
+import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.activities.DetailActivity;
+import com.udacity.popularmovies.adapters.ReviewRecyclerViewAdapter;
+import com.udacity.popularmovies.models.Review;
 
 /**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
+ * A simple {@link Fragment} subclass.
+ * Activities that contain this fragment must implement the
+ * {@link ReviewListFragment.OnListFragmentInteractionListener} interface
+ * to handle interaction events.
+ * Use the {@link ReviewListFragment#newInstance} factory method to
+ * create an instance of this fragment.
  */
-public class MovieGridFragment extends Fragment {
+public class ReviewListFragment extends Fragment {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public MovieGridFragment() {
+    public ReviewListFragment() {
+        // Required empty public constructor
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @return A new instance of fragment TrailerListFragment.
+     */
     @SuppressWarnings("unused")
-    public static MovieGridFragment newInstance(int columnCount) {
-        MovieGridFragment fragment = new MovieGridFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+    public static ReviewListFragment newInstance() {
+        return new ReviewListFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
+        View view = inflater.inflate(R.layout.fragment_review_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(context, mColumnCount);
-                recyclerView.setLayoutManager(gridLayoutManager);
-            }
-            recyclerView.setAdapter(new MyMovieRecyclerViewAdapter(MainActivity.MovieList, mListener, context));
+            recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            recyclerView.setAdapter(new ReviewRecyclerViewAdapter(DetailActivity.ReviewList, mListener));
         }
+
         return view;
     }
-
 
     @Override
     public void onAttach(Context context) {
@@ -79,7 +74,7 @@ public class MovieGridFragment extends Fragment {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
@@ -91,20 +86,19 @@ public class MovieGridFragment extends Fragment {
 
     public void NotifyChange() {
         if (recyclerView != null)
-            recyclerView.setAdapter(new MyMovieRecyclerViewAdapter(MainActivity.MovieList, mListener, getActivity()));
+            recyclerView.setAdapter(new ReviewRecyclerViewAdapter(DetailActivity.ReviewList, mListener));
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p/>
+     * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(Movie item);
+        void onListFragmentInteraction(Review review);
     }
 }

@@ -7,15 +7,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.udacity.popularmovies.DetailActivity">
+    tools:context="com.udacity.popularmovies.activities.DetailActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/movie_poster_iv"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/movie_picture_content_description_default"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <!--
         <TextView
             android:id="@+id/title_label"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            app:layout_constraintHorizontal_weight="3"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:labelFor="@id/title_tv"
@@ -23,6 +39,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+-->
 
         <TextView
             android:id="@+id/title_tv"
@@ -32,10 +49,10 @@
             android:layout_marginEnd="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/plot_synopsis_label"
+            app:layout_constraintStart_toEndOf="@id/movie_poster_iv"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Title example" />
-
+        <!--
         <TextView
             android:id="@+id/release_date_label"
             android:layout_width="wrap_content"
@@ -45,7 +62,7 @@
             android:text="@string/release_date_label"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title_tv" />
+            app:layout_constraintTop_toBottomOf="@id/title_tv" />-->
 
         <TextView
             android:id="@+id/release_date_tv"
@@ -53,12 +70,14 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:layout_marginEnd="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
             android:layout_marginRight="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/plot_synopsis_label"
+            app:layout_constraintStart_toEndOf="@+id/movie_poster_iv"
             app:layout_constraintTop_toBottomOf="@id/title_tv"
-            tools:text="Release date example" />
-
+            tools:text="2018" />
+        <!--
         <TextView
             android:id="@+id/vote_average_label"
             android:layout_width="wrap_content"
@@ -68,20 +87,34 @@
             android:text="@string/vote_average_label"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/release_date_tv" />
+            app:layout_constraintTop_toBottomOf="@id/release_date_tv" />-->
 
         <TextView
             android:id="@+id/vote_average_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:layout_marginEnd="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/plot_synopsis_label"
+            android:layout_marginTop="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
+            app:layout_constraintEnd_toEndOf="@+id/title_tv"
+            app:layout_constraintStart_toEndOf="@id/movie_poster_iv"
             app:layout_constraintTop_toBottomOf="@id/release_date_tv"
-            tools:text="Rating example" />
+            tools:text="9.5/10" />
 
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            style="@style/toggleButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="start"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/ic_toggle_bg"
+            app:layout_constraintStart_toEndOf="@+id/movie_poster_iv"
+            app:layout_constraintTop_toBottomOf="@+id/vote_average_tv" />
+
+        <!--
         <TextView
             android:id="@+id/plot_synopsis_label"
             android:layout_width="wrap_content"
@@ -91,29 +124,92 @@
             android:text="@string/plot_synopsis_label"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/vote_average_tv" />
+            app:layout_constraintTop_toBottomOf="@id/vote_average_tv" />-->
 
         <TextView
             android:id="@+id/plot_synopsis_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:layout_marginEnd="@dimen/text_margin"
-            android:layout_marginRight="@dimen/text_margin"
+            android:layout_marginTop="@dimen/text_margin"
             android:paddingBottom="@dimen/text_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/plot_synopsis_label"
-            app:layout_constraintTop_toBottomOf="@id/vote_average_tv"
-            tools:text="Plot synopsis example" />
+            app:layout_constraintEnd_toEndOf="@+id/title_tv"
+            app:layout_constraintStart_toStartOf="@+id/movie_poster_iv"
+            app:layout_constraintTop_toBottomOf="@id/movie_poster_iv"
+            tools:text="Lorem ipsum dolor sit amet, ac in ut cum pharetra purus in, hendrerit sapien lorem. Amet ante gravida urna maecenas aliquam, eros ante egestas, venenatis faucibus consectetuer, ante accumsan semper id sed quam, vitae per cras nulla in. In sit sit elementum augue ut cursus, augue est malesuada fermentum hac magnis justo, erat eget commodo iaculis et cras, interdum mi, lorem in temporibus non pretium. Nibh nulla imperdiet eget, orci sociis proin, cum at tempor mus adipisci. Varius amet diam, id quis imperdiet. Neque pellentesque lorem quis, taciti vulputate auctor mi." />
 
-        <ImageView
-            android:id="@+id/movie_poster_iv"
+        <View
+            android:id="@+id/trailers_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/plot_synopsis_tv" />
+
+        <TextView
+            android:id="@+id/trailers_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:text="@string/trailers_label"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/trailers_divider"
+            app:layout_constraintTop_toBottomOf="@id/trailers_divider" />
+
+        <fragment
+            android:id="@+id/fragment_trailer_list"
+            android:name="com.udacity.popularmovies.fragments.TrailerListFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/movie_picture_content_description_default"
-            android:scaleType="centerCrop"
-            app:layout_constraintTop_toBottomOf="@id/plot_synopsis_tv" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/trailers_label"
+            tools:context="com.udacity.popularmovies.activities.DetailActivity"
+            tools:layout="@layout/fragment_trailer_list" />
+
+        <View
+            android:id="@+id/reviews_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginEnd="@dimen/text_margin"
+            android:layout_marginLeft="@dimen/text_margin"
+            android:layout_marginRight="@dimen/text_margin"
+            android:layout_marginStart="@dimen/text_margin"
+            android:background="@android:color/darker_gray"
+            app:layout_constraintTop_toBottomOf="@id/fragment_trailer_list" />
+
+        <TextView
+            android:id="@+id/reviews_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_margin"
+            android:text="@string/reviews_label"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/reviews_divider"
+            app:layout_constraintTop_toBottomOf="@id/reviews_divider" />
+
+        <fragment
+            android:id="@+id/fragment_review_list"
+            android:name="com.udacity.popularmovies.fragments.ReviewListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reviews_label"
+            tools:context="com.udacity.popularmovies.activities.DetailActivity"
+            tools:layout="@layout/fragment_review_list" />
 
     </android.support.constraint.ConstraintLayout>
 

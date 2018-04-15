@@ -1,4 +1,4 @@
-package com.udacity.popularmovies;
+package com.udacity.popularmovies.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.activities.MainActivity;
+import com.udacity.popularmovies.fragments.MovieGridFragment.OnListFragmentInteractionListener;
 import com.udacity.popularmovies.models.Movie;
-import com.udacity.popularmovies.MovieGridFragment.OnListFragmentInteractionListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,13 +21,13 @@ import butterknife.ButterKnife;
  * {@link RecyclerView.Adapter} that can display a {@link Movie} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  */
-public class MyMovieRecyclerViewAdapter extends RecyclerView.Adapter<MyMovieRecyclerViewAdapter.ViewHolder> {
-    private final Movie[] mValues;
+public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.ViewHolder> {
+    private final Movie[] mMovies;
     private final OnListFragmentInteractionListener mListener;
     private final Context mContext;
 
-    MyMovieRecyclerViewAdapter(Movie[] items, OnListFragmentInteractionListener listener, Context activityContext) {
-        mValues = items;
+    public MovieRecyclerViewAdapter(Movie[] items, OnListFragmentInteractionListener listener, Context activityContext) {
+        mMovies = items;
         mListener = listener;
         mContext = activityContext;
     }
@@ -40,7 +42,7 @@ public class MyMovieRecyclerViewAdapter extends RecyclerView.Adapter<MyMovieRecy
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
-        holder.mItem = mValues[position];
+        holder.mItem = mMovies[position];
         Picasso.with(mContext)
                 .load(MainActivity.BASE_IMAGE_URL + MainActivity.IMAGE_SIZE + holder.mItem.poster_path)
                 .placeholder(R.mipmap.ic_launcher_round)
@@ -65,10 +67,10 @@ public class MyMovieRecyclerViewAdapter extends RecyclerView.Adapter<MyMovieRecy
 
     @Override
     public int getItemCount() {
-        if (mValues == null)
+        if (mMovies == null)
             return 0;
 
-        return mValues.length;
+        return mMovies.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -4,12 +4,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/movieGrid"
-    android:name="com.udacity.popularmovies.MovieGridFragment"
+    android:id="@+id/trailerList"
+    android:name="com.udacity.popularmovies.TrailerListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
+    android:nestedScrollingEnabled="false"
     app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-    tools:context="com.udacity.popularmovies.activities.MainActivity"
-    tools:listitem="@layout/item_movie" />
+    tools:context="com.udacity.popularmovies.activities.DetailActivity"
+    tools:listitem="@layout/item_trailer" />

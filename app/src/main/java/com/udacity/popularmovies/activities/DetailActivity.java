@@ -1,0 +1,218 @@
+package com.udacity.popularmovies.activities;
+
+import android.content.ActivityNotFoundException;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import com.squareup.picasso.Picasso;
+import com.udacity.popularmovies.R;
+import com.udacity.popularmovies.data.MovieContract.MovieEntry;
+import com.udacity.popularmovies.fragments.ReviewListFragment;
+import com.udacity.popularmovies.fragments.TrailerListFragment;
+import com.udacity.popularmovies.loaders.GetMovieReviewsAsyncTaskLoader;
+import com.udacity.popularmovies.loaders.GetMovieTrailersAsyncTaskLoader;
+import com.udacity.popularmovies.models.Movie;
+import com.udacity.popularmovies.models.Review;
+import com.udacity.popularmovies.models.Trailer;
+import com.udacity.popularmovies.utilities.NetworkUtils;
+import com.udacity.popularmovies.utilities.UserInterfaceUtils;
+
+
+public class DetailActivity extends AppCompatActivity implements
+        TrailerListFragment.OnListFragmentInteractionListener,
+        ReviewListFragment.OnListFragmentInteractionListener,
+        LoaderManager.LoaderCallbacks {
+
+    private static final String TAG = DetailActivity.class.getSimpleName();
+
+    private static final int LOADER_ID_MOVIE_TRAILERS = 23;
+    private static final int LOADER_ID_MOVIE_REVIEWS = 24;
+    public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
+    private static final String SAVED_STATE_TRAILERS = "SAVED_STATE_TRAILERS";
+    private static final String SAVED_STATE_REVIEWS = "SAVED_STATE_REVIEWS";
+
+    public static Trailer[] TrailerList;
+    public static Review[] ReviewList;
+
+    private static FragmentManager supportFragmentManager = null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
+
+        supportFragmentManager = getSupportFragmentManager();
+
+        Intent intent = getIntent();
+
+        if (intent != null) {
+            final Movie movie = intent.getParcelableExtra(EXTRA_MOVIE);
+
+            ImageView moviePosterIv = findViewById(R.id.movie_poster_iv);
+
+            final Context that = this;
+            ToggleButton favoriteToggle = findViewById(R.id.toggleButton);
+            favoriteToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        // The toggle is enabled
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put(MovieEntry.COLUMN_NAME_MOVIE_ID, movie.id);
+
+                        Uri uri = getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
+
+                        if (uri != null) {
+                            UserInterfaceUtils.ShowToastMessage(movie.title + " added to favorites.", that);
+                        }
+                    } else {
+                        // The toggle is disabled
+                        String stringMovieId = Long.toString(movie.id);
+                        Uri uri = MovieEntry.CONTENT_URI;
+                        uri = uri.buildUpon().appendPath(stringMovieId).build();
+
+                        int deleted = getContentResolver().delete(uri, null, null);
+
+                        if (deleted > 0) {
+                            UserInterfaceUtils.ShowToastMessage(movie.title + " removed from favorites.", that);
+                        }
+                    }
+                }
+            });
+
+            populateUI(movie);
+
+            Picasso.with(this)
+                    .load(MainActivity.BASE_IMAGE_URL + MainActivity.IMAGE_SIZE + movie.poster_path)
+                    .placeholder(R.mipmap.ic_launcher_round)
+                    .error(R.drawable.ic_launcher_background)
+                    .into(moviePosterIv);
+
+            setTitle(movie.title);
+
+            if (movie.id != null && NetworkUtils.IsOnline(this)) {
+                Bundle taskLoaderBundle = new Bundle();
+                taskLoaderBundle.putLong(GetMovieTrailersAsyncTaskLoader.EXTRA_MOVIE_ID, movie.id);
+
+                LoaderManager loaderManager = getSupportLoaderManager();
+                Loader<Boolean> trailerLoader = loaderManager.getLoader(LOADER_ID_MOVIE_TRAILERS);
+                Loader<Boolean> reviewLoader = loaderManager.getLoader(LOADER_ID_MOVIE_REVIEWS);
+
+                if (trailerLoader == null)
+                    loaderManager.initLoader(LOADER_ID_MOVIE_TRAILERS, taskLoaderBundle, this);
+                else
+                    loaderManager.restartLoader(LOADER_ID_MOVIE_TRAILERS, taskLoaderBundle, this);
+
+                if (reviewLoader == null)
+                    loaderManager.initLoader(LOADER_ID_MOVIE_REVIEWS, taskLoaderBundle, this);
+                else
+                    loaderManager.restartLoader(LOADER_ID_MOVIE_REVIEWS, taskLoaderBundle, this);
+            }
+        } else
+            closeOnError();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArray(SAVED_STATE_TRAILERS, TrailerList);
+        outState.putParcelableArray(SAVED_STATE_REVIEWS, ReviewList);
+    }
+
+    @NonNull
+    @Override
+    public Loader onCreateLoader(int id, @Nullable Bundle args) {
+        if (id == LOADER_ID_MOVIE_TRAILERS) {
+            return new GetMovieTrailersAsyncTaskLoader(this, args);
+        }
+        else {//if (id == LOADER_ID_MOVIE_REVIEWS) {
+            return new GetMovieReviewsAsyncTaskLoader(this, args);
+        }
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader loader, Object data) {
+        if (data != null) {
+            if (loader.getId() == LOADER_ID_MOVIE_TRAILERS) {
+                TrailerList = (Trailer[])data;
+
+                //region Inspired by: https://stackoverflow.com/a/31832721/5999847
+                if (supportFragmentManager != null) {
+                    TrailerListFragment fragment = (TrailerListFragment) supportFragmentManager.findFragmentById(R.id.fragment_trailer_list);
+
+                    // Notify fragment that the data set has changed and it should update is adapter.
+                    if (fragment != null)
+                        fragment.NotifyChange();
+                }
+                //endregion
+            }
+            else if (loader.getId() == LOADER_ID_MOVIE_REVIEWS) {
+                ReviewList = (Review[])data;
+
+                //region Inspired by: https://stackoverflow.com/a/31832721/5999847
+                if (supportFragmentManager != null) {
+                    ReviewListFragment fragment = (ReviewListFragment) supportFragmentManager.findFragmentById(R.id.fragment_review_list);
+
+                    // Notify fragment that the data set has changed and it should update is adapter.
+                    if (fragment != null)
+                        fragment.NotifyChange();
+                }
+                //endregion
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+
+    }
+
+    private void closeOnError() {
+        finish();
+        UserInterfaceUtils.ShowToastMessage(getString(R.string.detail_error_message), this);
+    }
+
+    private void populateUI(Movie movie) {
+        TextView titleTv = findViewById(R.id.title_tv);
+        TextView releaseDateTv = findViewById(R.id.release_date_tv);
+        TextView voteAverageTv = findViewById(R.id.vote_average_tv);
+        TextView plotSynopsisTv = findViewById(R.id.plot_synopsis_tv);
+
+        titleTv.setText(movie.title);
+        releaseDateTv.setText(movie.release_date);
+        voteAverageTv.setText(movie.vote_average);
+        plotSynopsisTv.setText(movie.overview);
+    }
+
+    @Override
+    public void onListFragmentInteraction(Trailer trailer) {
+        if (NetworkUtils.IsOnline(this)) {
+            //region Credit to: https://stackoverflow.com/questions/574195/android-youtube-app-play-video-intent?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+            Intent appIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:" + trailer.key));
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.youtube.com/watch?v=" + trailer.key));
+            try {
+                startActivity(appIntent);
+            } catch (ActivityNotFoundException ex) {
+                startActivity(webIntent);
+            }
+            //endregion
+        }
+    }
+
+    @Override
+    public void onListFragmentInteraction(Review review) {
+
+    }
+}

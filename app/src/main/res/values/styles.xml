@@ -1,6 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
+    <!-- Theme.AppCompat.Light.DarkActionBar -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -8,4 +9,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Inspired by: https://stackoverflow.com/questions/18598255/android-create-a-toggle-button-with-image-and-no-text/18599104#18599104-->
+    <style name="Widget.Button.Toggle" parent="android:Widget">
+        <item name="android:background">@drawable/ic_toggle_bg</item>
+        <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
+    </style>
+
+    <style name="toggleButton" parent="@android:style/Theme.Black">
+        <item name="android:buttonStyleToggle">@style/Widget.Button.Toggle</item>
+        <item name="android:textOn"></item>
+        <item name="android:textOff"></item>
+    </style>
 </resources>

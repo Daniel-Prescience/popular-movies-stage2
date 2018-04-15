@@ -7,8 +7,16 @@
     <string name="vote_average_label">Rating</string>
     <string name="plot_synopsis_label">Plot synopsis</string>
     <string name="detail_error_message">Movie data not available</string>
+    <string name="no_network_message">No network connection. Please try again later.</string>
+    <string name="trailers_label">Trailers:</string>
+    <string name="reviews_label">Reviews:</string>
+    <string name="content_description_play_trailer">Play trailer</string>
     <array name="spinner_list_item_array">
         <item>Popularity</item>
         <item>Rating</item>
+        <item>Favorites</item>
     </array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
