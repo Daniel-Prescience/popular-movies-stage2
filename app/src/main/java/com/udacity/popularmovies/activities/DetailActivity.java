@@ -13,6 +13,7 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -42,18 +43,32 @@ public class DetailActivity extends AppCompatActivity implements
     public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
     private static final String SAVED_STATE_TRAILERS = "SAVED_STATE_TRAILERS";
     private static final String SAVED_STATE_REVIEWS = "SAVED_STATE_REVIEWS";
+    private static final String KEY_LAYOUT_MANAGER_STATE = "KEY_LAYOUT_MANAGER_STATE";
 
     public static Trailer[] TrailerList;
     public static Review[] ReviewList;
 
-    private static FragmentManager supportFragmentManager = null;
+    private TrailerListFragment fragmentTrailers;
+    private ReviewListFragment fragmentReviews;
+
+    private ScrollView mDetailsScrollView;
+    private int mScrollPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        supportFragmentManager = getSupportFragmentManager();
+        //region Inspired by: https://stackoverflow.com/a/31832721/5999847
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+
+        if (supportFragmentManager != null) {
+            fragmentTrailers = (TrailerListFragment) supportFragmentManager.findFragmentById(R.id.fragment_trailer_list);
+            fragmentReviews = (ReviewListFragment) supportFragmentManager.findFragmentById(R.id.fragment_review_list);
+        }
+        //endregion
+
+        mDetailsScrollView = findViewById(R.id.details_scrollview);
 
         Intent intent = getIntent();
 
@@ -77,14 +92,11 @@ public class DetailActivity extends AppCompatActivity implements
                 taskLoaderBundle.putLong(GetMovieTrailersAsyncTaskLoader.EXTRA_MOVIE_ID, movie.id);
 
                 LoaderManager loaderManager = getSupportLoaderManager();
-                Loader<Boolean> trailerLoader = loaderManager.getLoader(LOADER_ID_MOVIE_TRAILERS);
-                Loader<Boolean> reviewLoader = loaderManager.getLoader(LOADER_ID_MOVIE_REVIEWS);
+/*                Loader<Boolean> trailerLoader = loaderManager.getLoader(LOADER_ID_MOVIE_TRAILERS);
+                Loader<Boolean> reviewLoader = loaderManager.getLoader(LOADER_ID_MOVIE_REVIEWS);*/
 
-                if (trailerLoader == null)
-                    loaderManager.restartLoader(LOADER_ID_MOVIE_TRAILERS, taskLoaderBundle, this);
-
-                if (reviewLoader == null)
-                    loaderManager.restartLoader(LOADER_ID_MOVIE_REVIEWS, taskLoaderBundle, this);
+                loaderManager.restartLoader(LOADER_ID_MOVIE_TRAILERS, taskLoaderBundle, this);
+                loaderManager.restartLoader(LOADER_ID_MOVIE_REVIEWS, taskLoaderBundle, this);
             }
         } else
             closeOnError();
@@ -93,8 +105,16 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArray(SAVED_STATE_TRAILERS, TrailerList);
-        outState.putParcelableArray(SAVED_STATE_REVIEWS, ReviewList);
+
+        mScrollPosition = mDetailsScrollView.getScrollY();
+        outState.putInt(KEY_LAYOUT_MANAGER_STATE, mScrollPosition);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        mScrollPosition = savedInstanceState.getInt(KEY_LAYOUT_MANAGER_STATE, 0);
     }
 
     @NonNull
@@ -114,30 +134,20 @@ public class DetailActivity extends AppCompatActivity implements
             if (loader.getId() == LOADER_ID_MOVIE_TRAILERS) {
                 TrailerList = (Trailer[])data;
 
-                //region Inspired by: https://stackoverflow.com/a/31832721/5999847
-                if (supportFragmentManager != null) {
-                    TrailerListFragment fragment = (TrailerListFragment) supportFragmentManager.findFragmentById(R.id.fragment_trailer_list);
-
-                    // Notify fragment that the data set has changed and it should update is adapter.
-                    if (fragment != null)
-                        fragment.NotifyChange();
-                }
-                //endregion
+                // Notify fragment that the data set has changed and it should update is adapter.
+                if (fragmentTrailers != null)
+                    fragmentTrailers.NotifyChange();
             }
             else if (loader.getId() == LOADER_ID_MOVIE_REVIEWS) {
                 ReviewList = (Review[])data;
 
-                //region Inspired by: https://stackoverflow.com/a/31832721/5999847
-                if (supportFragmentManager != null) {
-                    ReviewListFragment fragment = (ReviewListFragment) supportFragmentManager.findFragmentById(R.id.fragment_review_list);
-
-                    // Notify fragment that the data set has changed and it should update is adapter.
-                    if (fragment != null)
-                        fragment.NotifyChange();
-                }
-                //endregion
+                // Notify fragment that the data set has changed and it should update is adapter.
+                if (fragmentReviews != null)
+                    fragmentReviews.NotifyChange();
             }
         }
+
+        mDetailsScrollView.setScrollY(mScrollPosition);
     }
 
     @Override

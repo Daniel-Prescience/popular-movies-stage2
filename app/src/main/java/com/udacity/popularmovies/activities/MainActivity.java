@@ -114,14 +114,20 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void RefreshFragmentData() {
+    private void RefreshFragmentData() { //boolean restoreState) {
         //region Inspired by: https://stackoverflow.com/a/31832721/5999847
         if (supportFragmentManager != null) {
             MovieGridFragment fragment = (MovieGridFragment) supportFragmentManager.findFragmentById(R.id.fragment_movie_grid);
 
             // Notify fragment that the data set has changed and it should update is adapter.
-            if (fragment != null)
+            if (fragment != null) {
                 fragment.NotifyChange();
+
+/*                if (restoreState) {
+                    Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
+                    fragment.mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerLayoutState);
+                }*/
+            }
         }
         //endregion
     }

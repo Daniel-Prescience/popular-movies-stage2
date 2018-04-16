@@ -52,6 +52,7 @@ public class GetMoviesAsyncTaskLoader extends AsyncTaskLoader<Movie[]> {
             return "top_rated";
         return "popular";
     }
+
     @Override
     protected void onStartLoading() {
         if (m_moviesBySorting != null && m_moviesBySorting.containsKey(m_currentSorting)) {

@@ -57,6 +57,7 @@ public class TrailerListFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             recyclerView = (RecyclerView) view;
+            recyclerView.setHasFixedSize(true);
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
             recyclerView.setAdapter(new TrailerRecyclerViewAdapter(DetailActivity.TrailerList, mListener));
         }
@@ -82,8 +83,10 @@ public class TrailerListFragment extends Fragment {
     }
 
     public void NotifyChange() {
-        if (recyclerView != null)
+        if (recyclerView != null) {
             recyclerView.setAdapter(new TrailerRecyclerViewAdapter(DetailActivity.TrailerList, mListener));
+            //recyclerView.setMinimumHeight();
+        }
     }
     /**
      * This interface must be implemented by activities that contain this

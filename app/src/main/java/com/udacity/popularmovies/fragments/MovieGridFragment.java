@@ -2,18 +2,19 @@ package com.udacity.popularmovies.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.udacity.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.udacity.popularmovies.R;
 import com.udacity.popularmovies.activities.MainActivity;
+import com.udacity.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.udacity.popularmovies.models.Movie;
 
 /**
@@ -25,9 +26,12 @@ import com.udacity.popularmovies.models.Movie;
 public class MovieGridFragment extends Fragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String KEY_LAYOUT_MANAGER_STATE = "KEY_LAYOUT_MANAGER_STATE";
     private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
-    private RecyclerView recyclerView;
+    private RecyclerView mRecyclerView;
+    private GridLayoutManager mGridLayoutManager;
+    private Parcelable mSavedRecyclerLayoutState;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -62,18 +66,34 @@ public class MovieGridFragment extends Fragment {
         // Set the adapter
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
-            recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(context, mColumnCount);
-                recyclerView.setLayoutManager(gridLayoutManager);
-            }
-            recyclerView.setAdapter(new MovieRecyclerViewAdapter(MainActivity.MovieList, mListener, context));
+            mRecyclerView = (RecyclerView) view;
+
+            mGridLayoutManager = new GridLayoutManager(context, mColumnCount);
+            mRecyclerView.setLayoutManager(mGridLayoutManager);
+
+            mRecyclerView.setAdapter(new MovieRecyclerViewAdapter(MainActivity.MovieList, mListener, context));
         }
         return view;
     }
 
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if(savedInstanceState != null)
+        {
+            mSavedRecyclerLayoutState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
+            mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerLayoutState);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        mSavedRecyclerLayoutState = mGridLayoutManager.onSaveInstanceState();
+        outState.putParcelable(KEY_LAYOUT_MANAGER_STATE, mSavedRecyclerLayoutState);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -93,8 +113,12 @@ public class MovieGridFragment extends Fragment {
     }
 
     public void NotifyChange() {
-        if (recyclerView != null)
-            recyclerView.setAdapter(new MovieRecyclerViewAdapter(MainActivity.MovieList, mListener, getActivity()));
+        if (mRecyclerView != null) {
+            mRecyclerView.setAdapter(new MovieRecyclerViewAdapter(MainActivity.MovieList, mListener, getActivity()));
+
+            if (mSavedRecyclerLayoutState != null)
+                mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerLayoutState);
+        }
     }
 
     /**
