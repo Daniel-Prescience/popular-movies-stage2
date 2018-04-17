@@ -10,6 +10,7 @@
     <string name="no_network_message">No network connection. Please try again later.</string>
     <string name="trailers_label">Trailers:</string>
     <string name="reviews_label">Reviews:</string>
+    <string name="author_label">Author:</string>
     <string name="content_description_play_trailer">Play trailer</string>
     <string name="favorites">Favorites</string>
     <array name="spinner_list_item_array">

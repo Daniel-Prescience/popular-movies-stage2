@@ -65,13 +65,16 @@ public class MovieContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        Context context = getContext();
+
+        if (context != null)
+            context.getContentResolver().notifyChange(uri, null);
 
         return returnUri;
     }
 
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         final SQLiteDatabase db = mMovieDbHelper.getReadableDatabase();
 
@@ -95,13 +98,16 @@ public class MovieContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        Context context = getContext();
+
+        if (context != null)
+            returnCursor.setNotificationUri(context.getContentResolver(), uri);
 
         return returnCursor;
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
 
         int match = sUriMatcher.match(uri);
@@ -117,21 +123,23 @@ public class MovieContentProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
 
-        if (numRowsDeleted != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
+        Context context = getContext();
+
+        if (numRowsDeleted != 0 && context != null) {
+            context.getContentResolver().notifyChange(uri, null);
         }
 
         return numRowsDeleted;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection,
+    public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         int match = sUriMatcher.match(uri);
 
         switch (match) {

@@ -81,7 +81,6 @@ public class GetMoviesAsyncTaskLoader extends AsyncTaskLoader<Movie[]> {
     private Movie[] getMovies(String sort) {
         try {
             String requestUrlString = BASE_MOVIES_URL + getSortBy(sort) + API_SEGMENT + BuildConfig.API_KEY;
-
             String responseBody = GetResponseFromUrl(requestUrlString, TAG);
 
             JSONObject jsonObj = new JSONObject(responseBody);

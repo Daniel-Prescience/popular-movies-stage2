@@ -17,8 +17,6 @@ import java.util.Scanner;
 
 public class NetworkUtils {
 
-    private static final String TAG = NetworkUtils.class.getSimpleName();
-
     // Inspired by: https://stackoverflow.com/a/4009133/5999847
     public static boolean IsOnline(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);

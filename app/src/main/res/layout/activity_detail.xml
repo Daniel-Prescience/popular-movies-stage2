@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,9 +9,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.udacity.popularmovies.activities.DetailActivity">
+    <!--android:nestedScrollingEnabled="false"-->
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/details_layout"
+        android:descendantFocusability="blocksDescendants"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -215,4 +217,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
-</ScrollView>
+</android.support.v4.widget.NestedScrollView>

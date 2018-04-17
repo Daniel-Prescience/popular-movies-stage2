@@ -30,15 +30,12 @@ public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener,
         LoaderManager.LoaderCallbacks {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
     public static final String BASE_MOVIES_URL = "http://api.themoviedb.org/3/movie/";
     public static final String MOVIE_TRAILERS_SEGMENT = "/videos";
     public static final String MOVIE_REVIEWS_SEGMENT = "/reviews";
     public static final String API_SEGMENT = "?api_key=";
     public static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     public static final String IMAGE_SIZE = "w185";
-    private static final String SAVED_STATE_MOVIES = "SAVED_STATE_MOVIES";
-    private static final String SAVED_STATE_FAVORITES = "SAVED_STATE_FAVORITES";
 
     public static final int LOADER_ID_MOVIES = 22;
     public static final int LOADER_ID_FAVORITE_MOVIES = 29;
@@ -67,9 +64,8 @@ public class MainActivity extends AppCompatActivity implements
     protected void onResume() {
         super.onResume();
 
-        if (SortSelection != null && SortSelection.equals(getString(R.string.favorites))) {
+        if (SortSelection != null && SortSelection.equals(getString(R.string.favorites)))
             MovieList = FavoriteList;
-        }
         else
             getSupportLoaderManager().restartLoader(LOADER_ID_FAVORITE_MOVIES, null, this);
     }
@@ -114,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    private void RefreshFragmentData() { //boolean restoreState) {
+    private void RefreshFragmentData() {
         //region Inspired by: https://stackoverflow.com/a/31832721/5999847
         if (supportFragmentManager != null) {
             MovieGridFragment fragment = (MovieGridFragment) supportFragmentManager.findFragmentById(R.id.fragment_movie_grid);
@@ -122,11 +118,6 @@ public class MainActivity extends AppCompatActivity implements
             // Notify fragment that the data set has changed and it should update is adapter.
             if (fragment != null) {
                 fragment.NotifyChange();
-
-/*                if (restoreState) {
-                    Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(KEY_LAYOUT_MANAGER_STATE);
-                    fragment.mRecyclerView.getLayoutManager().onRestoreInstanceState(mSavedRecyclerLayoutState);
-                }*/
             }
         }
         //endregion
@@ -208,5 +199,4 @@ public class MainActivity extends AppCompatActivity implements
     public void onListFragmentInteraction(Movie item) {
         launchDetailActivity(item);
     }
-
 }

@@ -15,29 +15,13 @@ import com.udacity.popularmovies.activities.DetailActivity;
 import com.udacity.popularmovies.adapters.TrailerRecyclerViewAdapter;
 import com.udacity.popularmovies.models.Trailer;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TrailerListFragment.OnListFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TrailerListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class TrailerListFragment extends Fragment {
 
     private OnListFragmentInteractionListener mListener;
     private RecyclerView recyclerView;
 
-    public TrailerListFragment() {
-        // Required empty public constructor
-    }
+    public TrailerListFragment() { }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment TrailerListFragment.
-     */
     @SuppressWarnings("unused")
     public static TrailerListFragment newInstance() {
         return new TrailerListFragment();
@@ -83,21 +67,10 @@ public class TrailerListFragment extends Fragment {
     }
 
     public void NotifyChange() {
-        if (recyclerView != null) {
+        if (recyclerView != null)
             recyclerView.setAdapter(new TrailerRecyclerViewAdapter(DetailActivity.TrailerList, mListener));
-            //recyclerView.setMinimumHeight();
-        }
     }
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(Trailer trailer);
     }

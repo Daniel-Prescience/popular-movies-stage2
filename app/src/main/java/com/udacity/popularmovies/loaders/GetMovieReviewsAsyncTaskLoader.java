@@ -25,7 +25,7 @@ public class GetMovieReviewsAsyncTaskLoader extends AsyncTaskLoader<Review[]> {
 
     private static final String TAG = GetMovieReviewsAsyncTaskLoader.class.getSimpleName();
 
-    public static final String EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID";
+    private static final String EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID";
 
     private static final String JSON_RESULTS_KEY = "results";
     private static final String JSON_ID_KEY = "id";
@@ -40,13 +40,6 @@ public class GetMovieReviewsAsyncTaskLoader extends AsyncTaskLoader<Review[]> {
             mMovieId = args.getLong(EXTRA_MOVIE_ID);
     }
 
-    private static String getSortBy(String sort) {
-        if (sort.equals("Popularity"))
-            return "popular";
-        else if (sort.equals("Rating"))
-            return "top_rated";
-        return "popular";
-    }
     @Override
     protected void onStartLoading() {
         if (m_movieReviews != null) {

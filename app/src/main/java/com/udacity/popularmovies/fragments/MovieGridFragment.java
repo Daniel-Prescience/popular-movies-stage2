@@ -17,45 +17,28 @@ import com.udacity.popularmovies.activities.MainActivity;
 import com.udacity.popularmovies.adapters.MovieRecyclerViewAdapter;
 import com.udacity.popularmovies.models.Movie;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 public class MovieGridFragment extends Fragment {
 
-    private static final String ARG_COLUMN_COUNT = "column-count";
     private static final String KEY_LAYOUT_MANAGER_STATE = "KEY_LAYOUT_MANAGER_STATE";
-    private int mColumnCount = 2;
     private OnListFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
     private GridLayoutManager mGridLayoutManager;
     private Parcelable mSavedRecyclerLayoutState;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public MovieGridFragment() {
     }
 
     @SuppressWarnings("unused")
     public static MovieGridFragment newInstance(int columnCount) {
-        MovieGridFragment fragment = new MovieGridFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
+        return new MovieGridFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -68,7 +51,9 @@ public class MovieGridFragment extends Fragment {
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
 
-            mGridLayoutManager = new GridLayoutManager(context, mColumnCount);
+            int columnCount = getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE ? 3 : 2;
+
+            mGridLayoutManager = new GridLayoutManager(context, columnCount);
             mRecyclerView.setLayoutManager(mGridLayoutManager);
 
             mRecyclerView.setAdapter(new MovieRecyclerViewAdapter(MainActivity.MovieList, mListener, context));
@@ -88,7 +73,7 @@ public class MovieGridFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         mSavedRecyclerLayoutState = mGridLayoutManager.onSaveInstanceState();
@@ -101,8 +86,7 @@ public class MovieGridFragment extends Fragment {
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+            throw new RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener");
         }
     }
 
@@ -121,16 +105,6 @@ public class MovieGridFragment extends Fragment {
         }
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnListFragmentInteractionListener {
         void onListFragmentInteraction(Movie item);
     }

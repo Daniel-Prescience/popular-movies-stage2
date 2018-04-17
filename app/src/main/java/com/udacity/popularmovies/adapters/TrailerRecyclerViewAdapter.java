@@ -15,10 +15,6 @@ import com.udacity.popularmovies.models.Trailer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Trailer} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- */
 public class TrailerRecyclerViewAdapter extends RecyclerView.Adapter<TrailerRecyclerViewAdapter.ViewHolder> {
     private final Trailer[] mTrailers;
     private final OnListFragmentInteractionListener mListener;

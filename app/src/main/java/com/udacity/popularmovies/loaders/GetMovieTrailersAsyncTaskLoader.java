@@ -99,5 +99,4 @@ public class GetMovieTrailersAsyncTaskLoader extends AsyncTaskLoader<Trailer[]> 
             return null;
         }
     }
-
 }

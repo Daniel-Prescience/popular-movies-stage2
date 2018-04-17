@@ -15,10 +15,6 @@ import com.udacity.popularmovies.models.Review;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Review} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- */
 public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecyclerViewAdapter.ViewHolder> {
     private final Review[] mReviews;
     private final OnListFragmentInteractionListener mListener;
@@ -39,6 +35,9 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.mItem = mReviews[position];
+
+        // Set author name.
+        holder.mAuthor.setText(holder.mItem.author);
 
         // Set review text.
         holder.mReview.setText(holder.mItem.content);
@@ -67,6 +66,8 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
     public class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.review_tv)
         TextView mReview;
+        @BindView(R.id.author_tv)
+        TextView mAuthor;
 
         @BindView(R.id.review_layout)
         ConstraintLayout mLayout;

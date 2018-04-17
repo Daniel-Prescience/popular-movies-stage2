@@ -17,10 +17,6 @@ import com.udacity.popularmovies.models.Movie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Movie} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- */
 public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecyclerViewAdapter.ViewHolder> {
     private final Movie[] mMovies;
     private final OnListFragmentInteractionListener mListener;

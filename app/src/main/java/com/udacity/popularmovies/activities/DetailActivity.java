@@ -10,10 +10,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -30,19 +30,14 @@ import com.udacity.popularmovies.models.Trailer;
 import com.udacity.popularmovies.utilities.NetworkUtils;
 import com.udacity.popularmovies.utilities.UserInterfaceUtils;
 
-
 public class DetailActivity extends AppCompatActivity implements
         TrailerListFragment.OnListFragmentInteractionListener,
         ReviewListFragment.OnListFragmentInteractionListener,
         LoaderManager.LoaderCallbacks {
 
-    private static final String TAG = DetailActivity.class.getSimpleName();
-
     private static final int LOADER_ID_MOVIE_TRAILERS = 23;
     private static final int LOADER_ID_MOVIE_REVIEWS = 24;
     public static final String EXTRA_MOVIE = "EXTRA_MOVIE";
-    private static final String SAVED_STATE_TRAILERS = "SAVED_STATE_TRAILERS";
-    private static final String SAVED_STATE_REVIEWS = "SAVED_STATE_REVIEWS";
     private static final String KEY_LAYOUT_MANAGER_STATE = "KEY_LAYOUT_MANAGER_STATE";
 
     public static Trailer[] TrailerList;
@@ -51,7 +46,7 @@ public class DetailActivity extends AppCompatActivity implements
     private TrailerListFragment fragmentTrailers;
     private ReviewListFragment fragmentReviews;
 
-    private ScrollView mDetailsScrollView;
+    private NestedScrollView mDetailsScrollView;
     private int mScrollPosition = 0;
 
     @Override
@@ -92,8 +87,6 @@ public class DetailActivity extends AppCompatActivity implements
                 taskLoaderBundle.putLong(GetMovieTrailersAsyncTaskLoader.EXTRA_MOVIE_ID, movie.id);
 
                 LoaderManager loaderManager = getSupportLoaderManager();
-/*                Loader<Boolean> trailerLoader = loaderManager.getLoader(LOADER_ID_MOVIE_TRAILERS);
-                Loader<Boolean> reviewLoader = loaderManager.getLoader(LOADER_ID_MOVIE_REVIEWS);*/
 
                 loaderManager.restartLoader(LOADER_ID_MOVIE_TRAILERS, taskLoaderBundle, this);
                 loaderManager.restartLoader(LOADER_ID_MOVIE_REVIEWS, taskLoaderBundle, this);
@@ -108,6 +101,9 @@ public class DetailActivity extends AppCompatActivity implements
 
         mScrollPosition = mDetailsScrollView.getScrollY();
         outState.putInt(KEY_LAYOUT_MANAGER_STATE, mScrollPosition);
+
+        ToggleButton favoriteToggle = findViewById(R.id.toggleButton);
+        favoriteToggle.setOnCheckedChangeListener(null);
     }
 
     @Override
@@ -120,12 +116,10 @@ public class DetailActivity extends AppCompatActivity implements
     @NonNull
     @Override
     public Loader onCreateLoader(int id, @Nullable Bundle args) {
-        if (id == LOADER_ID_MOVIE_TRAILERS) {
+        if (id == LOADER_ID_MOVIE_TRAILERS)
             return new GetMovieTrailersAsyncTaskLoader(this, args);
-        }
-        else {//if (id == LOADER_ID_MOVIE_REVIEWS) {
+        else
             return new GetMovieReviewsAsyncTaskLoader(this, args);
-        }
     }
 
     @Override
@@ -186,10 +180,10 @@ public class DetailActivity extends AppCompatActivity implements
 
                     Uri uri = getContentResolver().insert(MovieEntry.CONTENT_URI, contentValues);
 
-                    if (uri != null) {
+                    if (uri != null)
                         UserInterfaceUtils.ShowToastMessage(movie.title + " added to favorites.", DetailActivity.this);
-                    }
-                } else {
+                }
+                else if (movie.id != null) {
                     // The toggle is disabled
                     int deleted = getContentResolver().delete(MovieEntry.CONTENT_URI, MovieEntry.COLUMN_NAME_MOVIE_ID + " = ? ", new String[]{Long.toString(movie.id)});
 

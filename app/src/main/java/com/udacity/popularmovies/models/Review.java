@@ -7,7 +7,7 @@ public class Review implements Parcelable {
     public final String id;
     public final String author;
     public final String content;
-    public final String url;
+    private final String url;
 
     public Review(String id, String key, String name, String site) {
         this.id = id;
