@@ -72,7 +72,7 @@ public class ReviewRecyclerViewAdapter extends RecyclerView.Adapter<ReviewRecycl
         @BindView(R.id.review_layout)
         ConstraintLayout mLayout;
 
-        public Review mItem;
+        Review mItem;
 
         ViewHolder(View view) {
             super(view);

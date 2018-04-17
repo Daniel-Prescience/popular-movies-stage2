@@ -23,7 +23,7 @@ import static com.udacity.popularmovies.utilities.NetworkUtils.GetResponseFromUr
 public class GetMoviesAsyncTaskLoader extends AsyncTaskLoader<Movie[]> {
 
     private String m_currentSorting = null;
-    private static Map<String, Movie[]> m_moviesBySorting = new HashMap<>();
+    private static final Map<String, Movie[]> m_moviesBySorting = new HashMap<>();
 
     private static final String TAG = GetMoviesAsyncTaskLoader.class.getSimpleName();
 

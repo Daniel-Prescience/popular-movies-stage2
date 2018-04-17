@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Trailer implements Parcelable {
-    public final String id;
+    private final String id;
     public final String key;
     public final String name;
     private final String site;

@@ -37,12 +37,12 @@ public class MainActivity extends AppCompatActivity implements
     public static final String BASE_IMAGE_URL = "http://image.tmdb.org/t/p/";
     public static final String IMAGE_SIZE = "w185";
 
-    public static final int LOADER_ID_MOVIES = 22;
-    public static final int LOADER_ID_FAVORITE_MOVIES = 29;
+    private static final int LOADER_ID_MOVIES = 22;
+    private static final int LOADER_ID_FAVORITE_MOVIES = 29;
 
     public static Movie[] MovieList;
-    public static Movie[] FavoriteList = new Movie[0];
-    public static String SortSelection;
+    private static Movie[] FavoriteList = new Movie[0];
+    private static String SortSelection;
 
     private static FragmentManager supportFragmentManager = null;
 
@@ -68,11 +68,6 @@ public class MainActivity extends AppCompatActivity implements
             MovieList = FavoriteList;
         else
             getSupportLoaderManager().restartLoader(LOADER_ID_FAVORITE_MOVIES, null, this);
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     // Credit: https://stackoverflow.com/a/37250623/5999847

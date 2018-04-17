@@ -67,7 +67,7 @@ public class TrailerRecyclerViewAdapter extends RecyclerView.Adapter<TrailerRecy
         @BindView(R.id.trailer_layout)
         ConstraintLayout mLayout;
 
-        public Trailer mItem;
+        Trailer mItem;
 
         ViewHolder(View view) {
             super(view);

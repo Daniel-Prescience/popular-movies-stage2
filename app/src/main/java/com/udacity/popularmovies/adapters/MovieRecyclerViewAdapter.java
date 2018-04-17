@@ -73,7 +73,7 @@ public class MovieRecyclerViewAdapter extends RecyclerView.Adapter<MovieRecycler
         @BindView(R.id.imageView)
         ImageView mImageView;
 
-        public Movie mItem;
+        Movie mItem;
 
         ViewHolder(View view) {
             super(view);

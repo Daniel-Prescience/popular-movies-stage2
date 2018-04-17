@@ -7,7 +7,7 @@ public class MovieContract {
 
     public static final String AUTHORITY = "com.udacity.popularmovies";
 
-    static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
     public static final String PATH_MOVIES = "movies";
 
     private MovieContract() {}

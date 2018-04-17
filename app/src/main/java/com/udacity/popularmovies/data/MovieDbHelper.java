@@ -6,12 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.udacity.popularmovies.data.MovieContract.MovieEntry;
 
-public class MovieDbHelper extends SQLiteOpenHelper {
+class MovieDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "movie.db";
     private static final int DATABASE_VERSION = 1;
 
-    public MovieDbHelper(Context context){
+    MovieDbHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

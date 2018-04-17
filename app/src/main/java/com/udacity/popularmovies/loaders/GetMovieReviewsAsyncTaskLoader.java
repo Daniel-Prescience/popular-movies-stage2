@@ -21,7 +21,7 @@ import static com.udacity.popularmovies.utilities.NetworkUtils.GetResponseFromUr
 public class GetMovieReviewsAsyncTaskLoader extends AsyncTaskLoader<Review[]> {
 
     private Long mMovieId = null;
-    private static LongSparseArray<Review[]> m_movieReviews = new LongSparseArray<>();
+    private static final LongSparseArray<Review[]> m_movieReviews = new LongSparseArray<>();
 
     private static final String TAG = GetMovieReviewsAsyncTaskLoader.class.getSimpleName();
 

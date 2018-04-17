@@ -37,11 +37,6 @@ public class MovieGridFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_grid, container, false);
@@ -51,7 +46,7 @@ public class MovieGridFragment extends Fragment {
             Context context = view.getContext();
             mRecyclerView = (RecyclerView) view;
 
-            int columnCount = getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE ? 3 : 2;
+            int columnCount = getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE ? 4 : 2;
 
             mGridLayoutManager = new GridLayoutManager(context, columnCount);
             mRecyclerView.setLayoutManager(mGridLayoutManager);

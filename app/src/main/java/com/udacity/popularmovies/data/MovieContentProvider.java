@@ -15,12 +15,12 @@ import com.udacity.popularmovies.data.MovieContract.MovieEntry;
 
 public class MovieContentProvider extends ContentProvider {
 
-    public static final int MOVIES = 100;
-    public static final int MOVIE_WITH_ID = 101;
+    private static final int MOVIES = 100;
+    private static final int MOVIE_WITH_ID = 101;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
-    public static UriMatcher buildUriMatcher(){
+    private static UriMatcher buildUriMatcher(){
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         uriMatcher.addURI(MovieContract.AUTHORITY, MovieContract.PATH_MOVIES, MOVIES);

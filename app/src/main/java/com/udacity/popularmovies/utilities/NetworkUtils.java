@@ -11,7 +11,6 @@ import com.udacity.popularmovies.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -53,9 +52,6 @@ public class NetworkUtils {
             //endregion
 
             return responseBody;
-        } catch (MalformedURLException e) {
-            Log.e(requesterTag, "Error", e);
-            return null;
         } catch (IOException e) {
             Log.e(requesterTag, "Error", e);
             return null;
